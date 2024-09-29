@@ -1,10 +1,10 @@
-package interface_types
+package any
 
 import (
 	"reflect"
 )
 
-func IsPrimitive(i interface{}) bool {
+func IsBasic(i any) bool {
 	switch reflect.TypeOf(i).Kind() {
 	case reflect.Bool,
 		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
@@ -18,6 +18,6 @@ func IsPrimitive(i interface{}) bool {
 	}
 }
 
-// func String(i interface{}) string {
-
-// }
+func IsComparable(i any) bool {
+	return reflect.ValueOf(i).Comparable()
+}
