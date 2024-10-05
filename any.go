@@ -4,15 +4,19 @@ import (
 	"reflect"
 )
 
+// Return true if the value given is an array. Else, false.
+func IsArray(v any) bool {
+	return isOfReflectKind(v, reflect.Array)
+}
+
 // Return true if the value given is a basic type. Else, false.
 func IsBasic(v any) bool {
-	switch reflect.TypeOf(v).Kind() {
-	case reflect.Bool,
-		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
-		reflect.Float32, reflect.Float64,
-		reflect.Complex64, reflect.Complex128,
-		reflect.String:
+	switch v.(type) {
+	case bool, int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64, uintptr,
+		float32, float64,
+		complex64, complex128,
+		string:
 		return true
 	default:
 		return false
@@ -24,32 +28,55 @@ func IsComparable(v any) bool {
 	return reflect.ValueOf(v).Comparable()
 }
 
+// Return true if the value given is a map. Else, false.
+func IsMap[V any](v V) bool {
+	return isOfReflectKind(v, reflect.Map)
+}
+
+// Return true if the value given is a valid numeric key. Else, false.
+func IsNumKey(v any) bool {
+	switch v := v.(type) {
+	case int:
+		return v > 0
+	case int8:
+		return v > 0
+	case int16:
+		return v > 0
+	case int32:
+		return v > 0
+	case int64:
+		return v > 0
+	case uint:
+		return v > 0
+	case uint8:
+		return v > 0
+	case uint16:
+		return v > 0
+	case uint32:
+		return v > 0
+	case uint64:
+		return v > 0
+	default:
+		return false
+	}
+}
+
 // Return true if the value given adheres to cmp.Ordered. Else, false.
 func IsOrdered(v any) bool {
-	t := reflect.TypeOf(v)
-	switch t.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr,
-		reflect.Float32, reflect.Float64, reflect.String:
+	switch v.(type) {
+	case int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64, uintptr,
+		float32, float64,
+		string:
 		return true
 	default:
 		return false
 	}
 }
 
-// Return true if the value given is a map. Else, false.
-func IsMap(v any) bool {
-	return isOfReflectKind(v, reflect.Map)
-}
-
 // Return true if the value given is a slice. Else, false.
 func IsSlice(v any) bool {
 	return isOfReflectKind(v, reflect.Slice)
-}
-
-// Return true if the value given is an array. Else, false.
-func IsArray(v any) bool {
-	return isOfReflectKind(v, reflect.Array)
 }
 
 // Return true if the value given is a struct. Else, false.
